@@ -23,12 +23,9 @@ function geraDesfio(desafios) {
 
         let resps = [0, 1, 2, 3]; // array para randomizar
         for (let i = 0; i < 4; i++) {
-            log(resps.join());
             let el = resps[Math.floor(Math.random() * resps.length)] // pega um randomico
-            log(`${el}`);
-            const ind = resps.indexOf(el);
-            log(ind);
-            resps.splice(ind, 1); // remove o randomico pego
+            const ind = resps.indexOf(el); //ach ao indice
+            resps.splice(ind, 1); // remove o randomico
             let div = createNode('div');
             // define a resposta certa, alert temporário
             desafio.resp_certa == el ? (
@@ -44,20 +41,6 @@ function geraDesfio(desafios) {
     });
 }
 
-// fetch(`../package.json`)
-//     .then((resp) => resp.json())
-//     .then(function (data) {
-//         tst.innerHTML = data.name;
-//         append(log, tst);
-//     });
-
-// fetch(`http://localhost:3000/users`)
-//     .then((resp) => resp.json())
-//     .then(function (data) {
-//         tst.innerHTML = data[0].name;
-//         append(log, tst);
-//     });
-
 fetch("http://localhost:3000/desafios/aleatorio")
     .then((resp) => resp.json())
     .then(x => geraDesfio(x))
@@ -65,18 +48,13 @@ fetch("http://localhost:3000/desafios/aleatorio")
         console.log(error);
     });
 
-    // .then(function (data) {
-    //     // let authors = data;
-    //     return authors.map(function (author) {
-    //         let li = createNode('li');
-    //         let span = createNode('span');
-    //         span.innerHTML = `${author.name} ${author.email}`;
-    //         append(li, span);
-    //         append(ul, li);
-    //     })
-    // })
-
-// const data = await(await fetch(`./desafios`)).json();
-// console.log(data);
-// document.getElementById("insert").innerHTML = "000";
-// document.getElementById("insert").innerHTML = data;
+// .then(function (data) {
+//     // let authors = data;
+//     return authors.map(function (author) {
+//         let li = createNode('li');
+//         let span = createNode('span');
+//         span.innerHTML = `${author.name} ${author.email}`;
+//         append(li, span);
+//         append(ul, li);
+//     })
+// })
