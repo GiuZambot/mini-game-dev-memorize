@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vw;
+}
+
+#respostas {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
+.btn {
+    width: 400px;
+    height: 150%;
+    margin: 20px;
+    padding: 20px;
+    background-color: bisque;
+    border-radius: 15px;
+    border: 2px solid gray;
+    
+}

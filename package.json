@@ -1,12 +1,27 @@
 {
-  "name": "reposit",
+  "name": "mini-game-dev-memorize",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Min game para memorizar sintaxes, tags, seletores, lógicas etc para programadores estudantes.",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GiuZambot/mini-game-dev-memorize.git"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GiuZambot/mini-game-dev-memorize/issues"
+  },
+  "homepage": "https://github.com/GiuZambot/mini-game-dev-memorize#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0"
+  }
 }
