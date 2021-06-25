@@ -21,15 +21,24 @@ function geraDesfio(desafios) {
         span.innerHTML = `${desafio.enunciado}`;
         append(h1, span);
 
-        for (let i = 1; i <= 4; i++) {
+        let resps = [0, 1, 2, 3]; // array para randomizar
+        for (let i = 0; i < 4; i++) {
+            log(resps.join());
+            let el = resps[Math.floor(Math.random() * resps.length)] // pega um randomico
+            log(`${el}`);
+            const ind = resps.indexOf(el);
+            log(ind);
+            resps.splice(ind, 1); // remove o randomico pego
             let div = createNode('div');
-            desafio.resp_certa == i ? (
-                div.innerHTML = `<div onClick="alert('Achou!')" class="btn">${desafio["resp_" + i]}</div>`
+            // define a resposta certa, alert temporário
+            desafio.resp_certa == el ? (
+                div.innerHTML = `<div onClick="alert('Achou!')" class="btn">${desafio["resp_" + el]}</div>`
             ) : (
-                div.innerHTML = `<div class="btn">${desafio["resp_" + i]}</div>`
+                div.innerHTML = `<div class="btn">${desafio["resp_" + el]}</div>`
             );
             append(rs, div);
         }
+
         document.getElementById('carregando').innerHTML = "";
 
     });
@@ -49,7 +58,7 @@ function geraDesfio(desafios) {
 //         append(log, tst);
 //     });
 
-fetch("http://localhost:3000/desafios")
+fetch("http://localhost:3000/desafios/aleatorio")
     .then((resp) => resp.json())
     .then(x => geraDesfio(x))
     .catch(function (error) {

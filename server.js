@@ -19,8 +19,7 @@ app.put('/users/:id', db.updateUser);
 app.delete('/users/:id', db.deleteUser);
 //desafios
 app.get('/desafios', db.getDesafios);
-
-
+app.get('/desafios/aleatorio', db.getDesafiosRand);
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)

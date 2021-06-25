@@ -79,6 +79,15 @@ const getDesafios = (request, response) => {
     })
 }
 
+const getDesafiosRand = (request, response) => {
+    pool.query('select * from desafio order by random() limit 1;', (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 // Gerais ? *********** 
 //query: (text, params) => pool.query(text, params)
 
@@ -91,6 +100,8 @@ module.exports = {
     updateUser,
     deleteUser,
     getDesafios,
+    getDesafiosRand,
+
 }
 
 /**
