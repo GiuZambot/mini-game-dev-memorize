@@ -4,21 +4,34 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Document</title>
+        <title>Minigame do Dev</title>
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
 
     <body>
         <audio id="audio" src=""></audio>
+
+
         <div id="box">
-            <button onclick="tocar()">tocar</button>
+            <div class="video"><video id="video" src=""></video></div>
+
+            <button onclick="trocarVideo()">TROCAR VÍDEO</button>
             <h1 id="pergunta"></h1>
             <div id="respostas"></div>
             <div id="log"></div>
         </div>
         <span id="carregando"><img width="150px" src="./load.gif" alt=""></span>
 
+        <div id="msgbox">
+            <h1>Você Acertou!</h1>
+            <button class="btn" onclick="novaPergunta()">Nova Pergunta</button>
+            <p>Por enquanto é um reload da página, com uma nova pergunta. Na próxima versão contaremos pontos ok?</p>
+        </div>
+
         <script src="./js.js"></script>
     </body>
+
+
 
 </html>

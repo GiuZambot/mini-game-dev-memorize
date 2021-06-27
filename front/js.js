@@ -13,6 +13,41 @@ function append(parent, el) {
     return parent.appendChild(el);
 }
 
+function corrigir(resp) {
+    const som = document.getElementById("audio");
+    resp === 1 ? (
+        trocarVideo("star.mp4"),
+        som.src = "tada.mp3",
+        document.getElementById('msgbox').style.display = "flex"
+    ) : (
+        som.src = "buzz.mp3"
+    )
+    som.play();
+}
+
+function novaPergunta() {
+    document.location.reload();
+}
+
+video_list = ["mario.webm", "sonic.mp4", "zelda.mp4"];
+function trocarVideo(video) {
+    const vid = document.getElementById("video");
+    const atual = [];
+    atual.push(...video_list);
+    let x = null;
+    if (video === "ini") {
+        vid.src = "sonic.mp4";
+    } else if (video) {
+        vid.src = video;
+    } else {
+        x = vid.src.slice(vid.src.lastIndexOf("/") + 1);
+        atual.splice(atual.indexOf(x), 1);
+        vid.src = atual[Math.floor(Math.random() * atual.length)];
+    }
+    vid.volume = 0.7;
+    vid.play();
+}
+
 function geraDesfio(desafios) {
     const h1 = document.getElementById('pergunta');
     const rs = document.getElementById('respostas');
@@ -27,16 +62,17 @@ function geraDesfio(desafios) {
             const ind = resps.indexOf(el); //ach ao indice
             resps.splice(ind, 1); // remove o randomico
             let btn = createNode('button');
-            // define a resposta certa, alert temporário
+            // define a resposta certa
             desafio.resp_certa == el ? (
                 btn.className = `btn`,
                 btn.innerHTML = `${desafio["resp_" + el]}`,
                 btn.onmouseout = stop, //uma forma de fazer
-                btn.addEventListener("click", function () { stop() }, false) // outra forma
+                btn.addEventListener("click", function () { corrigir(1) }, false) // outra forma
             ) : (
                 btn.className = `btn`,
                 btn.innerHTML = `${desafio["resp_" + el]}`,
-                btn.onmouseout = stop
+                btn.onmouseout = stop,
+                btn.addEventListener("click", function () { corrigir() }, false)
             );
             append(rs, btn);
         }
@@ -63,6 +99,7 @@ fetch("http://localhost:5500/desafios/aleatorio")
 //         append(ul, li);
 //     })
 // })
+
 
 
 const c4 = 261.6,
@@ -108,11 +145,6 @@ stop();
 frequency = e4;
 stop();
 
-lista_acordes = ["m.mp4"];
 
-function tocar() {
-    var som = document.getElementById("audio");
-    som.src = lista_acordes[0];
-    som.play();
-    console.log(som);
-}
+
+window.onload = trocarVideo("ini");
