@@ -5,6 +5,19 @@
 
 body {
     height: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#box {
+    width: 80%;
+    padding: 20px;
+    height: min-content;
+    border: 1px solid gray;
+    border-radius: 7px;
+    background-color: aliceblue;
+    display: none;
 }
 
 #respostas {
@@ -21,7 +34,7 @@ body {
     height: 150%;
     margin: 20px;
     padding: 20px;
-    background-color: bisque;
+    background-color: rgb(104, 165, 218);
     border-radius: 15px;
     border: 2px solid gray;
     

@@ -2,14 +2,17 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./queries');
 const app = express();
-const port = 3000;
+// const port = 5500;
+const port = process.env.PORT || 5500;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, }));
 app.use(cors());
 
-app.get('/', (request, response) => {
-    response.json({ info: 'Node.js, Express, and Postgres API' })
+app.use(express.static("front"));
+
+app.get("/", (request, response) => {
+    response.sendFile(__dirname + "/front/index.html");
 });
 
 app.get('/users', db.getUsers);
