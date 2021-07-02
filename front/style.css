@@ -14,6 +14,11 @@ body {
     animation-iteration-count: infinite;
 }
 
+.loading {
+    position: absolute;
+    width: 50vw;
+}
+
 /* box com vídeo de fundo ================================================= */
 
 #box {
