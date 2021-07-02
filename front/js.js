@@ -82,7 +82,9 @@ function geraDesfio(desafios) {
     });
 }
 
-fetch("http://localhost:5500/desafios/aleatorio")
+const host = process.env.PORT || 5500;
+
+fetch("https://gamedevlearn.herokuapp.com/desafios/aleatorio")
     .then((resp) => resp.json())
     .then(x => geraDesfio(x))
     .catch(function (error) {
