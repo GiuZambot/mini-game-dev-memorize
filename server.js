@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./queries');
 const app = express();
-// const port = 5500;
 const port = process.env.PORT || 5500;
 
 app.use(express.json());
@@ -15,15 +14,19 @@ app.get("/", (request, response) => {
     response.sendFile(__dirname + "/front/index.html");
 });
 
+// users
 app.get('/users', db.getUsers);
 app.get('/users/:id', db.getUserById);
 app.post('/users', db.createUser);
 app.put('/users/:id', db.updateUser);
 app.delete('/users/:id', db.deleteUser);
+// create 
+
 //desafios
 app.get('/desafios', db.getDesafios);
 app.get('/desafios/aleatorio', db.getDesafiosRand);
 
-app.listen(port, () => {
-    console.log(`App running on port ${port}.`)
-})
+const host = process.env.YOUR_HOST || '127.0.0.1';
+app.listen(port, host, () => {
+    console.log(`listening on http://localhost:${port}/`);
+});

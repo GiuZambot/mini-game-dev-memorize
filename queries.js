@@ -1,13 +1,21 @@
 // pg_ctl -D "C:\Program Files\PostgreSQL\13\data" start
 
-const Pool = require('pg').Pool
+// const Pool = require('pg').Pool;
+// const pool = new Pool({
+//     user: 'postgres',
+//     host: 'localhost',
+//     database: 'postgres',
+//     password: 'adm',
+//     port: 5432,
+// })
+
+const { Pool } = require('pg');
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'postgres',
-    password: 'adm',
-    port: 5432,
-})
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
 
 const getUsers = (request, response) => {
     // response.setHeader('Access-Control-Allow-Origin', '*');
@@ -71,7 +79,7 @@ const deleteUser = (request, response) => {
 // DESAFIOS ****************************************
 
 const getDesafios = (request, response) => {
-    pool.query('SELECT * FROM desafio ORDER BY id ASC', (error, results) => {
+    pool.query('SELECT * FROM desafios ORDER BY id ASC', (error, results) => {
         if (error) {
             throw error
         }
@@ -80,7 +88,7 @@ const getDesafios = (request, response) => {
 }
 
 const getDesafiosRand = (request, response) => {
-    pool.query('select * from desafio order by random() limit 1;', (error, results) => {
+    pool.query('select * from desafios order by random() limit 1;', (error, results) => {
         if (error) {
             throw error
         }
@@ -90,8 +98,6 @@ const getDesafiosRand = (request, response) => {
 
 // Gerais ? *********** 
 //query: (text, params) => pool.query(text, params)
-
-
 
 module.exports = {
     getUsers,

@@ -53,7 +53,7 @@ function geraDesfio(desafios) {
     const rs = document.getElementById('respostas');
     desafios.map(function (desafio) {
         let span = createNode("span");
-        span.innerHTML = `${desafio.enunciado}`;
+        span.innerHTML = `${desafio.pergunta}`;
         append(h1, span);
 
         let resps = [0, 1, 2, 3]; // array para randomizar
@@ -63,7 +63,7 @@ function geraDesfio(desafios) {
             resps.splice(ind, 1); // remove o randomico
             let btn = createNode('button');
             // define a resposta certa
-            desafio.resp_certa == el ? (
+            el === 0 ? (
                 btn.className = `btn`,
                 btn.innerHTML = `${desafio["resp_" + el]}`,
                 btn.onmouseout = stop, //uma forma de fazer
