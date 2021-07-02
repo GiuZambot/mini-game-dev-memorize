@@ -12,23 +12,21 @@
     <body>
         <audio id="audio" src=""></audio>
 
-
         <div id="box">
             <div class="video"><video id="video" src=""></video></div>
-
-            <button onclick="trocarVideo()">TROCAR VÍDEO</button>
+            <div>
+                <button onclick="trocarVideo()">TROCAR VÍDEO</button>
+                <div id="coracao">3</div>
+            </div>
             <h1 id="pergunta"></h1>
             <div id="respostas"></div>
-            <div id="log"></div>
+
         </div>
-        <span id="carregando"><img width="150px" src="./load.gif" alt=""></span>
+        <span id="carregando"><img width="50%" src="./load.gif" alt=""></span>
 
         <div id="msgbox">
-            <h1>Você Acertou!</h1>
-            <button class="btn" onclick="novaPergunta()">Nova Pergunta</button>
-            <p>Por enquanto é um reload da página, com uma nova pergunta. Na próxima versão contaremos pontos ok?</p>
         </div>
-
+        <div id="log"></div>
         <script src="./js.js"></script>
     </body>
 

@@ -1,3 +1,15 @@
+let cores = 3;
+
+const certoMsg = `<h1>Você Acertou!</h1>
+<button class="btn" onclick="novaPergunta()">Nova Pergunta</button>
+<p>Por enquanto é um reload da página, com uma nova pergunta. Na próxima versão contaremos pontos ok?</p>`;
+
+const morteMsg = `<h1>Você Morreu!</h1>
+<button class="btn" onclick="novaPergunta()">Nova Pergunta</button>
+<p>Por enquanto é um reload da página, com uma nova pergunta. Na próxima versão contaremos pontos ok?</p>`;
+
+const msgBox = document.getElementById("msgbox");
+
 function log(msg) {
     const log = document.getElementById("log");
     let div = createNode("div");
@@ -15,14 +27,22 @@ function append(parent, el) {
 
 function corrigir(resp) {
     const som = document.getElementById("audio");
+    const core = document.getElementById("coracao");
     resp === 1 ? (
         trocarVideo("star.mp4"),
         som.src = "tada.mp3",
-        document.getElementById('msgbox').style.display = "flex"
+        msgBox.innerHTML = certoMsg,
+        msgBox.style.display = "flex"
     ) : (
-        som.src = "buzz.mp3"
+        som.src = "buzz.mp3",
+        cores--,
+        core.innerHTML = cores
     )
     som.play();
+    if (cores < 1) {
+        msgBox.innerHTML = morteMsg;
+        msgBox.style.display = "flex";
+    }
 }
 
 function novaPergunta() {
@@ -82,7 +102,11 @@ function geraDesfio(desafios) {
     });
 }
 
-fetch("https://gamedevlearn.herokuapp.com/desafios/aleatorio")
+const host = "https://gamedevlearn.herokuapp.com";
+//temporário
+//const host = "http://localhost:5500";
+
+fetch(host + "/desafios/aleatorio")
     .then((resp) => resp.json())
     .then(x => geraDesfio(x))
     .catch(function (error) {

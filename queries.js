@@ -1,5 +1,7 @@
 // pg_ctl -D "C:\Program Files\PostgreSQL\13\data" start
 
+
+//local
 // const Pool = require('pg').Pool;
 // const pool = new Pool({
 //     user: 'postgres',
@@ -9,6 +11,8 @@
 //     port: 5432,
 // })
 
+
+//heroku
 const { Pool } = require('pg');
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,

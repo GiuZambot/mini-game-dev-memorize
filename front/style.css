@@ -5,7 +5,6 @@
 
 body {
     min-height: 100vh;
-    /* background-color: #E5E5E5; */
     background: linear-gradient(0, #cbc7f3, #202150);
     display: flex;
     align-items: center;
@@ -25,9 +24,32 @@ body {
     position: relative;
 }
 
-#box > button {
-    margin: 10px;
-    padding: 5px;
+#box div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#box #coracao {
+    width: 50px;
+    height: 50px;
+    background-image: url("./coracao.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bolder;
+    animation-name: core;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+
+}
+
+#box button {
+    margin: 20px 0px;
+    padding: 15px;
     background-color: rgba(148, 0, 211, 0.5);
     border-radius: 5px;
     border: 1px dashed gray;
@@ -52,6 +74,23 @@ body {
     object-fit: cover;
 }
 
+#box .btn {
+    font-size: 20px;
+    width: 80%;
+    margin: 20px;
+    padding: 20px;
+    background-color: rgba(139, 184, 197, 0.816);
+    border-radius: 15px;
+    border: 2px solid gray;
+}
+
+#box .btn:hover {
+    animation-name: piscar;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    cursor: pointer;
+}
+
 /* Pedguntas e respostas ================================================ */
 
 #pergunta {
@@ -60,32 +99,12 @@ body {
     padding: 10px;
 }
 
-
 #respostas {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-}
-
-
-.btn {
-    font-size: 20px;
-    width: 80%;
-    margin: 20px;
-    padding: 20px;
-    background-color: rgba(104, 191, 218, 0.816);
-    border-radius: 15px;
-    border: 2px solid gray;
-    
-}
-
-.btn:hover{
-    animation-name: piscar;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-    cursor: pointer;
 }
 
 /* Mensagem Box ===================== */
@@ -100,11 +119,20 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
 }
 
 #msgbox p {
     font-size: 18px;
+}
+
+#msgbox .btn {
+    font-size: 20px;
+    width: 80%;
+    margin: 20px;
+    padding: 20px;
+    background-color: rgba(124, 216, 116, 0.816);
+    border-radius: 15px;
+    border: 2px solid rgb(83, 118, 68);
 }
 
 /* Animações =========================*/
@@ -129,5 +157,22 @@ body {
 
         color: white;
         box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.35);
+    }
+}
+
+@keyframes core {
+    0% {
+        color: white;
+    }
+    50%
+    {   
+        color: yellow;
+        background-size: 100%;
+        font-size: 100%;
+    }
+    100% {
+        color: white;
+        background-size: 90%;
+        font-size: 95%;
     }
 }

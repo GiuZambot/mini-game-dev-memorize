@@ -27,7 +27,9 @@ app.get('/desafios', db.getDesafios);
 app.get('/desafios/aleatorio', db.getDesafiosRand);
 
 const port = process.env.PORT || 5500;
+//local
+//const host = process.env.YOUR_HOST || '127.0.0.1';
 const host = process.env.YOUR_HOST || '0.0.0.0';
 app.listen(port, host, () => {
-    console.log(`listening on http://localhost:${port}/`);
+    console.log(`listening on ${host} - ${port}`);
 });
