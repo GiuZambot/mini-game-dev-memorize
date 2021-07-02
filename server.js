@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./queries');
 const app = express();
-const port = process.env.PORT || 5500;
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, }));
@@ -26,7 +26,8 @@ app.delete('/users/:id', db.deleteUser);
 app.get('/desafios', db.getDesafios);
 app.get('/desafios/aleatorio', db.getDesafiosRand);
 
-const host = process.env.YOUR_HOST || '127.0.0.1';
+const port = process.env.PORT || 5500;
+const host = process.env.YOUR_HOST || '0.0.0.0';
 app.listen(port, host, () => {
     console.log(`listening on http://localhost:${port}/`);
 });
