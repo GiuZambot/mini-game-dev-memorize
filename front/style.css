@@ -9,58 +9,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    animation-name: chuva;
-    animation-duration: 25s;
-    animation-iteration-count: infinite;
+    font-size: 28px;
 }
 
-.loading {
-    position: absolute;
-    width: 50vw;
-}
+/* box e video ================================================= */
 
-/* box com vídeo de fundo ================================================= */
-
-#box {
-    width: 70%;
+.box {
+    width: 75%;
     padding: 20px;
-    height: min-content;
     display: none;
     position: relative;
 }
 
-#box div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#box #coracao {
-    width: 50px;
-    height: 50px;
-    background-image: url("./coracao.svg");
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    font-weight: bolder;
-    animation-name: core;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-
-}
-
-#box button {
-    margin: 20px 0px;
-    padding: 15px;
-    background-color: rgba(148, 0, 211, 0.5);
-    border-radius: 5px;
-    border: 1px dashed gray;
-}
-
-#box > .video {
+.video {
     border: 1px solid gray;
     border-radius: 25px;
     position: absolute;
@@ -74,37 +35,74 @@ body {
     justify-content: stretch;
     overflow: hidden;
 }
-#box > .video > video {
+
+.video video {
     width: 100%;
     object-fit: cover;
 }
 
-#box .btn {
-    font-size: 20px;
-    width: 80%;
-    margin: 20px;
-    padding: 20px;
-    background-color: rgba(139, 184, 197, 0.816);
-    border-radius: 15px;
-    border: 2px solid gray;
+/* status ================================================= */
+
+.status {
+    background-color: #2021508c;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
-#box .btn:hover {
-    animation-name: piscar;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
+.status__trocavid, .status__pontos, .status__relogio, .status__coracao {
+    width: 100px;
+    height: 50px;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 30px;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
 }
 
-/* Pedguntas e respostas ================================================ */
+.status__trocavid {
+    font-size: 18px;
+    width: 150px;
+    background-color: rgba(187, 76, 235, 0.666);
+    border: 1px dashed gray;
+}
 
-#pergunta {
+.status__pontos {
+    color: rgb(38, 34, 34);
+    background-color: rgba(200, 223, 230,0.8);
+    border: 1px dashed gray;
+}
+
+.status__relogio {
+    color: white;
+    background-image: url("./relogio.svg");
+    background-size: 100px;
+    background-position: 50% 77%;
+    background-repeat: no-repeat;
+    animation: relogio 1s infinite;
+}
+
+.status__coracao {
+    background-image: url("./coracao.svg");
+    background-size: 80px;
+    background-position: 50% 77%;
+    background-repeat: no-repeat;
+    animation: core 1s infinite;
+}
+
+/* Desafio ================================ */
+
+.pergunta {
     font-size: 40px;
-    background-color: rgba(250, 235, 215, 0.782);
+    background-color: rgba(255, 244, 228, 0.8);
     padding: 10px;
 }
 
-#respostas {
+.resposta {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -112,35 +110,109 @@ body {
     justify-content: space-evenly;
 }
 
-/* Mensagem Box ===================== */
 
-#msgbox {
-    width: 50%;
+.box .btn {
+    font-size: 20px;
+    width: 80%;
+    margin: 20px;
     padding: 20px;
+    background-color: rgba(139, 184, 197, 0.816);
+    border-radius: 15px;
+    border: 2px solid gray;
+    cursor: pointer;
+}
+
+.box .btn:hover {
+    animation-name: piscar;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    cursor: pointer;
+}
+
+
+/* Mensagem Box =========================================== */
+
+.msgbox {
+    box-sizing: border-box;
+    width: 65%;
+    padding: 40px;
     position: absolute;
     background-color: rgba(255, 228, 196, 0.85);
     border-radius: 15px;
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-#msgbox p {
-    font-size: 18px;
+.msgbox h2 {
+    padding: 10px 0px 40px 0px;
 }
 
-#msgbox .btn {
-    font-size: 20px;
-    width: 80%;
-    margin: 20px;
-    padding: 20px;
+.msgbox ul {
+    margin: 20px 20px;
+}
+
+.msgbox li {
+    line-height: 32px;
+}
+
+.msgbox p {
+    padding: 10px 0px;
+}
+
+.msgbox__btn {
+    width: 100%;
     background-color: rgba(124, 216, 116, 0.816);
     border-radius: 15px;
-    border: 2px solid rgb(83, 118, 68);
+    padding: 15px;
+    margin: 20px 0px;
+    font-size: 32px;
+    line-height: 38px;
+    cursor: pointer;
 }
 
-/* Animações =========================*/
+/* icone animado ================================  */
+
+.darkGroup {
+    fill: rgba(0, 0, 255, 0.6);
+}
+
+.lightGroup {
+    fill: rgba(238, 130, 238, 0.6);
+}
+
+.dark1,
+.light1,
+.dark2 {
+    transition: all 1s ease;
+}
+
+.dark2 {
+    transform: translateX(-50%);
+    opacity: 0;
+}
+
+svg {
+    height: 100px;
+}
+
+svg:hover .light1 {
+    transform: translateX(18%);
+}
+
+svg:hover .dark1 {
+    transform: translateX(50%);
+    opacity: 0;
+}
+
+svg:hover .dark2 {
+    transform: translateX(12%);
+    opacity: 0.6;
+}
+
+
+/* Animações ==========================================*/
 
 @keyframes piscar {
     0% {
@@ -151,7 +223,7 @@ body {
     }
     50%
     {   
-        width: 90%;
+        width: 81%;
 
         color: yellow;
         box-shadow: 5px 5px 5px rgba(255, 255, 50, 1),
@@ -168,16 +240,48 @@ body {
 @keyframes core {
     0% {
         color: white;
+        background-size: 80px;
+        font-size: 100%;
     }
     50%
     {   
         color: yellow;
-        background-size: 100%;
-        font-size: 100%;
+        background-size: 85px;
+        font-size: 99%;
     }
     100% {
         color: white;
-        background-size: 90%;
-        font-size: 95%;
+        background-size: 75px;
+        font-size: 100%;
+    }
+}
+
+@keyframes relogio {
+    0% {
+        transform: rotate(0deg);
+    }
+    33% {
+        transform: rotate(45deg);
+    }
+    66% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-45deg);
+    }
+}
+
+@keyframes back_tempo {
+    0% {
+        background: linear-gradient(0, #cbc7f3, #202150);
+    }
+    33% {
+        background: linear-gradient(0, #cbc7f3, #25c933);
+    }
+    66% {
+        background: linear-gradient(0, #cbc7f3, #eef82a);
+    }
+    100% {
+        background: linear-gradient(0, #cbc7f3, #f2385a);
     }
 }

@@ -1,174 +1,195 @@
-let cores = 3;
-
-const certoMsg = `<h1>Você Acertou!</h1>
-<button class="btn" onclick="novaPergunta()">Nova Pergunta</button>
-<p>Por enquanto é um reload da página, com uma nova pergunta. Na próxima versão contaremos pontos ok?</p>`;
-
-const morteMsg = `<h1>Você Morreu!</h1>
-<button class="btn" onclick="novaPergunta()">Nova Pergunta</button>
-<p>Por enquanto é um reload da página, com uma nova pergunta. Na próxima versão contaremos pontos ok?</p>`;
-
-const msgBox = document.getElementById("msgbox");
-
-function log(msg) {
-    const log = document.getElementById("log");
-    let div = createNode("div");
-    div.innerHTML = `${msg}`;
-    append(log, div);
-}
-
-function createNode(element) {
-    return document.createElement(element);
-}
-
-function append(parent, el) {
-    return parent.appendChild(el);
-}
-
-function corrigir(resp) {
-    const som = document.getElementById("audio");
-    const core = document.getElementById("coracao");
-    resp === 1 ? (
-        trocarVideo("star.mp4"),
-        som.src = "tada.mp3",
-        msgBox.innerHTML = certoMsg,
-        msgBox.style.display = "flex"
-    ) : (
-        som.src = "buzz.mp3",
-        cores--,
-        core.innerHTML = cores
-    )
-    som.play();
-    if (cores < 1) {
-        msgBox.innerHTML = morteMsg;
-        msgBox.style.display = "flex";
-    }
-}
-
-function novaPergunta() {
-    document.location.reload();
-}
-
-video_list = ["mario.webm", "sonic.mp4", "zelda.mp4"];
-function trocarVideo(video) {
-    const vid = document.getElementById("video");
-    const atual = [];
-    atual.push(...video_list);
-    let x = null;
-    if (video === "ini") {
-        vid.src = "sonic.mp4";
-    } else if (video) {
-        vid.src = video;
-    } else {
-        x = vid.src.slice(vid.src.lastIndexOf("/") + 1);
-        atual.splice(atual.indexOf(x), 1);
-        vid.src = atual[Math.floor(Math.random() * atual.length)];
-    }
-    vid.volume = 0.7;
-    vid.play();
-}
-
-function geraDesfio(desafios) {
-    const h1 = document.getElementById('pergunta');
-    const rs = document.getElementById('respostas');
-    desafios.map(function (desafio) {
-        let span = createNode("span");
-        span.innerHTML = `${desafio.pergunta}`;
-        append(h1, span);
-
-        let resps = [0, 1, 2, 3]; // array para randomizar
-        for (let i = 0; i < 4; i++) {
-            let el = resps[Math.floor(Math.random() * resps.length)] // pega um randomico
-            const ind = resps.indexOf(el); //ach ao indice
-            resps.splice(ind, 1); // remove o randomico
-            let btn = createNode('button');
-            // define a resposta certa
-            el === 0 ? (
-                btn.className = `btn`,
-                btn.innerHTML = `${desafio["resp_" + el]}`,
-                btn.onmouseout = stop, //uma forma de fazer
-                btn.addEventListener("click", function () { corrigir(1) }, false) // outra forma
-            ) : (
-                btn.className = `btn`,
-                btn.innerHTML = `${desafio["resp_" + el]}`,
-                btn.onmouseout = stop,
-                btn.addEventListener("click", function () { corrigir() }, false)
-            );
-            append(rs, btn);
+const game = {
+    // Configuração do game
+    cores: 5,
+    relogio: 20,
+    pontos: 0,
+    timer: null,
+    host: "https://gamedevlearn.herokuapp.com", // origem do json desafio, uso local "http://localhost:5500"
+    certoMsg: `<h1>Você Acertou!</h1><button class="msgbox__btn" onclick="game.ini(false)">Nova Pergunta</button><p>Quantos pontos você consegue fazer antes de morrer?</p>`,
+    morteMsg: `<h1>Você Morreu!</h1><button class="msgbox__btn" onclick="game.ini(true)">Começar de novo!</button><p>Não desanime, tente de novo!</p>`,
+    // Elementos manipulados durante o game
+    SOM: document.getElementById("audio"),
+    VID: document.getElementById("video"),
+    BOX: document.getElementsByClassName("box")[0],
+    PONTO: document.getElementsByClassName("status__pontos")[0],
+    REL: document.getElementsByClassName("status__relogio")[0],
+    CORE: document.getElementsByClassName("status__coracao")[0],
+    PERGUNTA: document.getElementsByClassName("pergunta")[0],
+    RESPOSTA: document.getElementsByClassName("resposta")[0],
+    MSGBOX: document.getElementsByClassName("msgbox")[0],
+    RANKING: document.getElementsByClassName("ranking")[0],
+    nd: function (element) { return document.createElement(element); },
+    ap: function (parent, el) { return parent.appendChild(el); },
+    ini: function (prop) {
+        // Executa som de inicio, insere gif animado de carregamento, busca json do DB, envia para a função de renderizar o desafio
+        this.pong.plin();
+        this.MSGBOX.innerHTML = `<img src="load.gif">`;
+        prop ? (this.cores = 5, this.CORE.innerHTML = 5, this.pontos = 0, this.PONTO.innerHTML = 0) : 0;
+        fetch(this.host + "/desafios/aleatorio")
+            .then((resp) => resp.json())
+            .then(x => this.geraDesfio(x))
+            .catch(function (error) {
+                console.log(error);
+            });
+    },
+    ranking: {
+        get: function () {
+            // Puxa ranking
+            this.RANKING.innerHTML = `<img src="load.gif">`;
+            fetch(this.host + "/ranking")
+                .then((resp) => resp.json())
+                .then(function (data) {
+                    return data.map(function (jogador) {
+                        const div = this.nd("div");
+                        div.innerHTML = `${jogador.nome} ==> ${jogador.pontos}`;
+                        this.ap(RANKING, div);
+                    })
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        put: function () {
+            // Envia
+            this.RANKING.innerHTML = `<img src="load.gif">`;
+            fetch(this.host + "/ranking")
+                .then((resp) => resp.json())
+                .then(function (data) {
+                    return data.map(function (jogador) {
+                        let li = createNode('li');
+                        let span = createNode('span');
+                        span.innerHTML = `${jogador.nome} ${jogador.pontos}`;
+                        append(li, span);
+                        append(ul, li);
+                    })
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
-        document.getElementById('carregando').innerHTML = "";
-        document.getElementById('box').style.display = "block";
-        const box = document.getElementById("btn1");
-    });
+    },
+    geraDesfio: function (desafios) {
+        // Desliga a box da mensagem e reinicia divs
+        this.MSGBOX.style.display = "none";
+        this.PERGUNTA.innerHTML = "";
+        this.RESPOSTA.innerHTML = "";
+        // Insere pergunta
+        this.PERGUNTA.innerHTML = `${desafios[0].pergunta}`;
+        // Insere respostas em ordem randomica.
+        const resps = [0, 1, 2, 3]; // array para randomizar
+        for (let i = 0; i < 4; i++) {
+            // Randomizando
+            const el = resps[Math.floor(Math.random() * resps.length)] // pega um randomico
+            const ind = resps.indexOf(el);
+            resps.splice(ind, 1); // remove o randomico para não se repetir
+            //Botão da respota
+            const btn = this.nd('button');
+            btn.className = `btn`;
+            btn.innerHTML = `${desafios[0]["resp_" + el]}`;
+            btn.addEventListener("mouseout", () => this.pong.ping());
+            btn.addEventListener("click", () => game.corrigir(el), { once: true });
+            this.ap(this.RESPOSTA, btn);
+        }
+        // Mostra o jogo, inicia vídeo, animação do background e contagem de tempo.
+        this.BOX.style.display = "block";
+        this.trocarVideo();
+        document.body.style.animation = "";
+        setTimeout(() => document.body.style.animation = "back_tempo 20s ease", 25);
+        this.relogio = 20;
+        this.contagem();
+    },
+    contagem: function () {
+        this.timer = setTimeout(() => {
+            this.relogio--;
+            this.REL.innerHTML = this.relogio;
+            this.relogio < 1 ? (
+                // Morte por esgotamento do tempo, fim de jogo.
+                this.trocarVideo("morte.mp4"),
+                document.body.style.animationPlayState = "paused",
+                this.MSGBOX.innerHTML = this.morteMsg,
+                this.MSGBOX.style.display = "flex"
+            ) : (
+                this.pong.ping("tic"),
+                this.contagem()
+            )
+        }, 1000);
+    },
+    corrigir: function (resp) {
+        resp === 0 ? (
+            // Resposta correta: exibe vídeo e som de vitória, adiciona uma vida, soma os pontos, exibe caixa de mensagem.
+            clearTimeout(this.timer),
+            this.trocarVideo("star.mp4"),
+            document.body.style.animationPlayState = "paused",
+            this.cores++,
+            this.CORE.innerHTML = this.cores,
+            this.pontos += this.relogio,
+            this.PONTO.innerHTML = this.pontos,
+            this.MSGBOX.innerHTML = this.certoMsg,
+            this.MSGBOX.style.display = "flex",
+            this.SOM.src = "tada.mp3"
+        ) : (
+            // Resposta errada: tira uma vida e toca a buzina.
+            this.SOM.src = "buzz.mp3",
+            this.cores--,
+            this.CORE.innerHTML = this.cores
+        )
+        this.SOM.play();
+        if (this.cores < 1) {
+            // Caso de morte por esgotamento de vidas
+            clearTimeout(this.timer);
+            this.trocarVideo("morte.mp4");
+            document.body.style.animationPlayState = "paused";
+            this.MSGBOX.innerHTML = this.morteMsg;
+            this.MSGBOX.style.display = "flex";
+        }
+    },
+    trocarVideo: function (video) {
+        // Videos de fundo, de vitória e derrota.
+        if (video === "ini") {
+            this.VID.src = "sonic.mp4";
+        } else if (video) {
+            this.VID.src = video;
+        } else {
+            // Troca para um vídeo aleatório sem repetir
+            const video_list = ["mario.webm", "sonic.mp4", "zelda.mp4", "io.mp4"];
+            const x = this.VID.src.slice(this.VID.src.lastIndexOf("/") + 1); // Pega o vídeo atual
+            video_list.splice(video_list.indexOf(x), 1); // Remove o vídeo atual da array
+            this.VID.src = video_list[Math.floor(Math.random() * video_list.length)]; // Seta um vídeo diferente
+        }
+        this.VID.volume = 0.3;
+        this.VID.play();
+    },
+    pong: {
+        // Sons do jogo
+        fsnd: {
+            c4: 261.6,
+            d4: 293.7,
+            e4: 329.6,
+            f4: 349.2,
+            g4: 392.0,
+            a4: 440.0,
+            b4: 493.9,
+            tic: 800
+        },
+        ping: function (f) {
+            f = this.fsnd[f] || this.fsnd.c4;
+            const context = new AudioContext();
+            const oscillator = context.createOscillator();
+            const contextGain = context.createGain();
+            oscillator.frequency.value = f;
+            oscillator.type = 'sine';
+            oscillator.connect(contextGain);
+            contextGain.connect(context.destination);
+            oscillator.start(0);
+            contextGain.gain.exponentialRampToValueAtTime(
+                0.0000001, context.currentTime + 0.5
+            );
+        },
+        plin: function () {
+            this.ping("c4");
+            this.ping("d4");
+            this.ping("ec");
+            this.ping("f4");
+        }
+    }
 }
-
-const host = "https://gamedevlearn.herokuapp.com";
-//temporário
-//const host = "http://localhost:5500";
-
-fetch(host + "/desafios/aleatorio")
-    .then((resp) => resp.json())
-    .then(x => geraDesfio(x))
-    .catch(function (error) {
-        console.log(error);
-    });
-
-// .then(function (data) {
-//     // let authors = data;
-//     return authors.map(function (author) {
-//         let li = createNode('li');
-//         let span = createNode('span');
-//         span.innerHTML = `${author.name} ${author.email}`;
-//         append(li, span);
-//         append(ul, li);
-//     })
-// })
-
-
-
-const c4 = 261.6,
-    d4 = 293.7,
-    e4 = 329.6,
-    f4 = 349.2,
-    g4 = 392.0,
-    a4 = 440.0,
-    b4 = 493.9;
-
-
-let context,
-    oscillator,
-    contextGain,
-    x = 1,
-    type = 'sine',
-    frequency;
-
-function start() {
-    context = new AudioContext();
-    oscillator = context.createOscillator();
-    contextGain = context.createGain();
-    oscillator.frequency.value = frequency;
-    oscillator.type = type;
-    oscillator.connect(contextGain);
-    contextGain.connect(context.destination);
-    oscillator.start(0);
-}
-
-function stop() {
-    start();
-    contextGain.gain.exponentialRampToValueAtTime(
-        0.00001, context.currentTime + x
-    )
-}
-
-frequency = c4;
-stop();
-frequency = d4;
-stop();
-frequency = c4;
-stop();
-frequency = e4;
-stop();
-
-
-
-window.onload = trocarVideo("ini");
