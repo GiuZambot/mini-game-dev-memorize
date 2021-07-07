@@ -1,28 +1,78 @@
 // pg_ctl -D "C:\Program Files\PostgreSQL\13\data" start
 
-
 //local
-// const Pool = require('pg').Pool;
-// const pool = new Pool({
-//     user: 'postgres',
-//     host: 'localhost',
-//     database: 'postgres',
-//     password: 'adm',
-//     port: 5432,
-// })
-
+const Pool = require('pg').Pool;
+const pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'postgres',
+    password: 'adm',
+    port: 5432,
+})
 
 //heroku
-const { Pool } = require('pg');
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
-});
+// const { Pool } = require('pg');
+// const pool = new Pool({
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: {
+//         rejectUnauthorized: false
+//     }
+// });
+
+// DESAFIOS ****************************************
+
+const getDesafios = (request, response) => {
+    pool.query('SELECT * FROM desafios ORDER BY id ASC', (error, results) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(results.rows);
+    });
+};
+
+const getDesafiosRand = (request, response) => {
+    pool.query('select * from desafios order by random() limit 1;', (error, results) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(results.rows);
+    });
+};
+
+// RANKING
+const getRanking = (request, response) => {
+    pool.query('SELECT * FROM ranking ORDER BY pontos DESC LIMIT 100', (error, results) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(results.rows);
+    });
+};
+
+const setRanking = (request, response) => {
+    const { nome, pontos } = request.body;
+    pool.query('INSERT INTO ranking (nome, pontos) VALUES ($1, $2)', [nome, pontos], (error, results) => {
+        if (error) {
+            throw error;
+        }
+        response.status(201).send(`Jogador rankeado: ${results.insertId}`);
+    })
+};
+//INSERT INTO public.ranking (nome, pontos) VALUES ('Picles'::character varying, '5'::integer) returning id;
+
+module.exports = {
+    getDesafios,
+    getDesafiosRand,
+    getRanking,
+    setRanking,
+}
+
+/*
+Exemplos:
+
+query: (text, params) => pool.query(text, params)
 
 const getUsers = (request, response) => {
-    // response.setHeader('Access-Control-Allow-Origin', '*');
     pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
         if (error) {
             throw error
@@ -80,41 +130,7 @@ const deleteUser = (request, response) => {
     })
 }
 
-// DESAFIOS ****************************************
-
-const getDesafios = (request, response) => {
-    pool.query('SELECT * FROM desafios ORDER BY id ASC', (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
-}
-
-const getDesafiosRand = (request, response) => {
-    pool.query('select * from desafios order by random() limit 1;', (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
-}
-
-// Gerais ? *********** 
-//query: (text, params) => pool.query(text, params)
-
-module.exports = {
-    getUsers,
-    getUserById,
-    createUser,
-    updateUser,
-    deleteUser,
-    getDesafios,
-    getDesafiosRand,
-
-}
-
-/**
+Curl no terminal para teste local
 POST
 curl --data "name=Elaine&email=elaine@example.com"
 http://localhost:3000/users
