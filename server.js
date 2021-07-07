@@ -22,8 +22,8 @@ app.get('/ranking', db.getRanking);
 app.post('/ranking', db.setRanking);
 
 const port = process.env.PORT || 5500;
-const host = process.env.YOUR_HOST || '127.0.0.1'; // uso local
-// const host = process.env.YOUR_HOST || '0.0.0.0'; // Heroku
+// const host = process.env.YOUR_HOST || '127.0.0.1'; // uso local
+const host = process.env.YOUR_HOST || '0.0.0.0'; // Heroku
 app.listen(port, host, () => {
     console.log(`listening on ${host} - ${port}`);
 });
