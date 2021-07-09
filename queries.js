@@ -51,6 +51,7 @@ const getRanking = (request, response) => {
 
 const setRanking = (request, response) => {
     const { nome, pontos } = request.body;
+    response.setHeader('Access-Control-Allow-Origin', '*');
     pool.query('INSERT INTO ranking (nome, pontos) VALUES ($1, $2)', [nome, pontos], (error, results) => {
         if (error) {
             throw error;

@@ -51,11 +51,11 @@ const game = {
     },
     rankPut: function () {
         // Envia
-        this.RANKING.innerHTML = `<img src="load.gif" alt="Gif Carregando">`;
+        this.RANK.innerHTML = `<img src="load.gif" alt="Gif Carregando">`;
         let formData = new FormData();
-        formData.append('nome', document.getElementById("nikrank"));
+        formData.append('nome', document.getElementById("nickrank"));
         formData.append('pontos', this.pontos);
-        fetch(this.host + "/ranking",{ method: 'POST', body: formData})
+        fetch(this.host + "/ranking", { method: 'POST', body: formData })
             .then((resp) => {
                 game.RANK.innerHMTL = `<h1>${resp}</h1>`;
             })
@@ -198,3 +198,5 @@ const game = {
         }
     }
 }
+
+window.onload = () => game.rankGet();
