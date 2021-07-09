@@ -6,24 +6,24 @@ const game = {
     timer: null,
     host: "https://gamedevlearn.herokuapp.com", // origem do json desafio, uso local "http://localhost:5500"
     certoMsg: `<h1>Você Acertou!</h1><button class="msgbox__btn" onclick="game.ini(false)">Nova Pergunta</button><p>Quantos pontos você consegue fazer antes de morrer?</p>`,
-    morteMsg: `<h1>Você Morreu!</h1><button class="msgbox__btn" onclick="game.ini(true)">Começar de novo!</button><p>Não desanime, tente de novo!</p>`,
+    morteMsg: `<h1>Você Morreu!</h1><button class="msgbox__btn" onclick="game.ini(true)">Começar de novo!</button><p>Não desanime, tente de novo!</p><div class="putrank"><input type="text" value="" placeholder="Seu nick aqui"><button onclick="game.rankPut()" ></div>`,
     // Elementos manipulados durante o game
     SOM: document.getElementById("audio"),
     VID: document.getElementById("video"),
+    MSGBOX: document.getElementById("msgbox"),
     BOX: document.getElementsByClassName("box")[0],
     PONTO: document.getElementsByClassName("status__pontos")[0],
     REL: document.getElementsByClassName("status__relogio")[0],
     CORE: document.getElementsByClassName("status__coracao")[0],
     PERGUNTA: document.getElementsByClassName("pergunta")[0],
     RESPOSTA: document.getElementsByClassName("resposta")[0],
-    MSGBOX: document.getElementsByClassName("msgbox")[0],
-    RANKING: document.getElementsByClassName("ranking")[0],
+    RANK: document.getElementsByClassName("ranking")[0],
     nd: function (element) { return document.createElement(element); },
     ap: function (parent, el) { return parent.appendChild(el); },
     ini: function (prop) {
         // Executa som de inicio, insere gif animado de carregamento, busca json do DB, envia para a função de renderizar o desafio
         this.pong.plin();
-        this.MSGBOX.innerHTML = `<img src="load.gif">`;
+        this.MSGBOX.innerHTML = `<img src="load.gif" alt="Gif Carregando">`;
         prop ? (this.cores = 5, this.CORE.innerHTML = 5, this.pontos = 0, this.PONTO.innerHTML = 0) : 0;
         fetch(this.host + "/desafios/aleatorio")
             .then((resp) => resp.json())
@@ -31,46 +31,41 @@ const game = {
             .catch(function (error) {
                 console.log(error);
             });
+        this.rankGet();
     },
-    ranking: {
-        get: function () {
-            // Puxa ranking
-            this.RANKING.innerHTML = `<img src="load.gif">`;
-            fetch(this.host + "/ranking")
-                .then((resp) => resp.json())
-                .then(function (data) {
-                    return data.map(function (jogador) {
-                        const div = this.nd("div");
-                        div.innerHTML = `${jogador.nome} ==> ${jogador.pontos}`;
-                        this.ap(RANKING, div);
-                    })
-                })
-                .catch(function (error) {
-                    console.log(error);
+    rankGet: function name(params) {
+        // Puxa ranking
+        this.RANK.innerHTML = `<img src="load.gif" alt="Gif Carregando">`;
+        fetch(this.host + "/ranking")
+            .then((resp) => resp.json())
+            .then(function (data) {
+                game.RANK.innerHTML = "";
+                return data.map(function (jogador) {
+                    game.RANK.innerHTML += `<div>${jogador.nome}</div><div>${jogador.pontos}</div>`;
                 });
-        },
-        put: function () {
-            // Envia
-            this.RANKING.innerHTML = `<img src="load.gif">`;
-            fetch(this.host + "/ranking")
-                .then((resp) => resp.json())
-                .then(function (data) {
-                    return data.map(function (jogador) {
-                        let li = createNode('li');
-                        let span = createNode('span');
-                        span.innerHTML = `${jogador.nome} ${jogador.pontos}`;
-                        append(li, span);
-                        append(ul, li);
-                    })
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        this.RANK.style.display = "flex";
+    },
+    rankPut: function () {
+        // Envia
+        this.RANKING.innerHTML = `<img src="load.gif" alt="Gif Carregando">`;
+        let formData = new FormData();
+        formData.append('nome', document.getElementById("nikrank"));
+        formData.append('pontos', this.pontos);
+        fetch(this.host + "/ranking",{ method: 'POST', body: formData})
+            .then((resp) => {
+                game.RANK.innerHMTL = `<h1>${resp}</h1>`;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     },
     geraDesfio: function (desafios) {
         // Desliga a box da mensagem e reinicia divs
-        this.MSGBOX.style.display = "none";
+        this.MSGBOX.className = "msgbox__none";
         this.PERGUNTA.innerHTML = "";
         this.RESPOSTA.innerHTML = "";
         // Insere pergunta
@@ -85,13 +80,15 @@ const game = {
             //Botão da respota
             const btn = this.nd('button');
             btn.className = `btn`;
+            btn.id = "btn" + el;
             btn.innerHTML = `${desafios[0]["resp_" + el]}`;
             btn.addEventListener("mouseout", () => this.pong.ping());
-            btn.addEventListener("click", () => game.corrigir(el), { once: true });
+            btn.addEventListener("mousedown", () => game.corrigir(el), { once: true });
             this.ap(this.RESPOSTA, btn);
         }
         // Mostra o jogo, inicia vídeo, animação do background e contagem de tempo.
         this.BOX.style.display = "block";
+        this.RANK.style.display = "flex";
         this.trocarVideo();
         document.body.style.animation = "";
         setTimeout(() => document.body.style.animation = "back_tempo 20s ease", 25);
@@ -105,9 +102,10 @@ const game = {
             this.relogio < 1 ? (
                 // Morte por esgotamento do tempo, fim de jogo.
                 this.trocarVideo("morte.mp4"),
+                this.BOX.style.display = "none",
                 document.body.style.animationPlayState = "paused",
                 this.MSGBOX.innerHTML = this.morteMsg,
-                this.MSGBOX.style.display = "flex"
+                this.MSGBOX.className = "msgbox__morte"
             ) : (
                 this.pong.ping("tic"),
                 this.contagem()
@@ -115,8 +113,12 @@ const game = {
         }, 1000);
     },
     corrigir: function (resp) {
+        //Separado para agilizar audio do botão
+        resp === 0 ? (this.SOM.src = "tada.mp3") : (this.SOM.src = "buzz.mp3");
+        this.SOM.play();
+
         resp === 0 ? (
-            // Resposta correta: exibe vídeo e som de vitória, adiciona uma vida, soma os pontos, exibe caixa de mensagem.
+            // Resposta correta: exibe vídeo, adiciona uma vida, soma os pontos, exibe caixa de mensagem.
             clearTimeout(this.timer),
             this.trocarVideo("star.mp4"),
             document.body.style.animationPlayState = "paused",
@@ -125,22 +127,25 @@ const game = {
             this.pontos += this.relogio,
             this.PONTO.innerHTML = this.pontos,
             this.MSGBOX.innerHTML = this.certoMsg,
-            this.MSGBOX.style.display = "flex",
-            this.SOM.src = "tada.mp3"
+            this.BOX.style.display = "none",
+            this.RANK.style.display = "none",
+            this.MSGBOX.className = "msgbox"
         ) : (
-            // Resposta errada: tira uma vida e toca a buzina.
-            this.SOM.src = "buzz.mp3",
+            // Resposta errada: tira uma vida
             this.cores--,
-            this.CORE.innerHTML = this.cores
+            this.CORE.innerHTML = this.cores,
+            document.getElementById("btn" + resp).className = "btn__errado",
+            document.getElementById("btn" + resp).removeEventListener("mouseout", () => this.pong.ping())
         )
-        this.SOM.play();
+
         if (this.cores < 1) {
             // Caso de morte por esgotamento de vidas
+            this.BOX.style.display = "none";
             clearTimeout(this.timer);
             this.trocarVideo("morte.mp4");
             document.body.style.animationPlayState = "paused";
             this.MSGBOX.innerHTML = this.morteMsg;
-            this.MSGBOX.style.display = "flex";
+            this.MSGBOX.className = "msgbox__morte"
         }
     },
     trocarVideo: function (video) {

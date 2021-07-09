@@ -4,17 +4,19 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Jogo de perguntas e respostas para testar conhecimentos em HTML, CSS e JavaScript.">
 
+        <meta name="description" content="Jogo de perguntas e respostas para testar conhecimentos em HTML, CSS e JavaScript.">
         <title>Minigame do Dev</title>
 
         <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
 
     <body>
-        <audio id="audio" src=""></audio>
+        <audio id="audio" src="" preload="auto">
+            <source src="buzz.mp3" type="audio/mp3">
+            <source src="tada.mp3" type="audio/mp3">
+        </audio>
 
         <div class="box">
 
@@ -32,9 +34,7 @@
 
         </div>
 
-        <div class="ranking"></div>
-
-        <div class="msgbox">
+        <div class="msgbox" id="msgbox">
             <h1>Desafio Dev Web</h1>
             <ul>
                 <li>Você tem 20 segundos para responder.</li>
@@ -44,7 +44,9 @@
             <p>Próxima versão teremos um rank salvo!</p>
             <h2>Começar o jogo:</h2>
 
-            <svg class="msgbox__btn" onclick="game.ini()" viewBox="-120 0 350 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="putrank"><input type="text" id="nikrank" value="" placeholder="Seu nick aqui"><button  onclick="game.rankPut()">Salvar Rank</button></div>
+
+            <svg class=" msgbox__btn" onclick="game.ini()" viewBox="-120 0 350 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g class="triangles">
                     <g class="lightGroup">
                         <path class="light1" opacity="0.6" d="M53.4872 46.3509C55.7436 47.6536 55.7436 50.9105 53.4872 52.2132L13.718 75.174C11.4615 76.4767 8.64104 74.8483 8.64104 72.2428L8.64104 26.3213C8.64104 23.7158 11.4616 22.0874 13.718 23.3901L53.4872 46.3509Z" />
@@ -58,7 +60,9 @@
 
         </div>
 
-        <script src="./js.js"></script>
+        <div class="ranking"></div>
+
+        <script src="game.js"></script>
     </body>
 
 </html>

@@ -55,7 +55,7 @@ const setRanking = (request, response) => {
         if (error) {
             throw error;
         }
-        response.status(201).send(`Jogador rankeado: ${results.insertId}`);
+        response.status(201).send(`Jogada salva! Verifique abaixo se está entre os TOP 50 :) `);
     })
 };
 //INSERT INTO public.ranking (nome, pontos) VALUES ('Picles'::character varying, '5'::integer) returning id;

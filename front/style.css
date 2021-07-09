@@ -7,6 +7,7 @@ body {
     min-height: 100vh;
     background: linear-gradient(0, #cbc7f3, #202150);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 28px;
@@ -17,27 +18,23 @@ body {
 .box {
     width: 75%;
     padding: 20px;
+    margin: 30px 0px;
+    border-radius: 25px;
     display: none;
     position: relative;
+    overflow: hidden;
 }
 
 .video {
-    border: 1px solid gray;
     border-radius: 25px;
     position: absolute;
     top: 0;
     left: 0;
     z-index: -1;
-    min-width: 100%;
-    min-height: 100%;
-    display: flex;
-    align-items: stretch;
-    justify-content: stretch;
-    overflow: hidden;
-}
+    }
 
 .video video {
-    width: 100%;
+    width: 80vw;
     object-fit: cover;
 }
 
@@ -100,21 +97,20 @@ body {
     font-size: 40px;
     background-color: rgba(255, 244, 228, 0.8);
     padding: 10px;
+    margin: 20px 0px;
 }
 
 .resposta {
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    z-index: 0;
 }
 
-
 .box .btn {
-    font-size: 20px;
+    font-size: 25px;
     width: 80%;
-    margin: 20px;
+    margin: 10px;
     padding: 20px;
     background-color: rgba(139, 184, 197, 0.816);
     border-radius: 15px;
@@ -129,20 +125,66 @@ body {
     cursor: pointer;
 }
 
+.box .btn__errado {
+    font-size: 22px;
+    width: 79%;
+    margin: 10px;
+    padding: 18px;
+    background-color: rgba(194, 194, 194, 0.816);
+    border-radius: 15px;
+    border: 2px solid gray;
+    cursor: default;
+}
+
+/* ranking ==================== */
+
+.ranking {
+    background-color: #cbc7f3;
+    width: 50%;
+    padding: 20px;
+    border-radius: 15px;
+    display: none;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+
+.ranking div {
+    color: white;
+    flex-basis: 50%;
+    border-bottom: 1px groove #2021502f;
+    font-size: 38px;
+    font-weight: bolder;
+    line-height: 40px;
+    display: flex;
+    justify-content: center;
+}
 
 /* Mensagem Box =========================================== */
 
-.msgbox {
+.msgbox, .msgbox__morte, .msgbox__none {
     box-sizing: border-box;
     width: 65%;
     padding: 40px;
     position: absolute;
     background-color: rgba(255, 228, 196, 0.85);
     border-radius: 15px;
-    display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+}
+
+.msgbox {
+    position: absolute;
+    display: flex;
+}
+
+.msgbox__none {
+    display: none;
+}
+
+.msgbox__morte {
+    position: relative;
+    display: flex;
 }
 
 .msgbox h2 {
