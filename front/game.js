@@ -4,7 +4,7 @@ const game = {
     relogio: 20,
     pontos: 0,
     timer: null,
-    // host: "https://gamedevlearn.herokuapp.com", // origem do json desafio, uso local "http://localhost:5500"
+    host: "https://gamedevlearn.herokuapp.com", // origem do json desafio, uso local "http://localhost:5500"
     // host: "http://localhost:5500",
     certoMsg: `<h1>Você Acertou!</h1><button class="msgbox__btn" onclick="game.ini(false)">Nova Pergunta</button><p>Quantos pontos você consegue fazer antes de morrer?</p>`,
     morteMsg: `<h1>Você Morreu!</h1><button class="msgbox__btn" onclick="game.ini(true)">Começar de novo!</button><p>Não desanime, tente de novo! Mas salve seus pontos!</p><div class="putrank"><input type="text" id="nickRank" placeholder="Seu nick aqui"><button onclick="game.rankPut()">Salvar</button></div>`,
