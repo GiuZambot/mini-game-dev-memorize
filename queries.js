@@ -10,7 +10,7 @@
 //     port: 5432,
 // })
 
-heroku
+//heroku
 const { Pool } = require('pg');
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
