@@ -34,7 +34,7 @@ body {
     }
 
 .video video {
-    width: 80vw;
+    width: 200vw;
     object-fit: cover;
 }
 
@@ -157,9 +157,32 @@ body {
     font-weight: bolder;
     line-height: 40px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
+.ranking .putrank {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ranking .pAtivo {
+    width: 100%;
+    flex-basis: 49%;
+    color: red;
+    border: 1px solid red;
+}
+
+.putrank input {
+    width: 70%;
+    font-size: 38px;
+    font-weight: bolder;
+}
+
+.putrank button {
+    width: 29%;
+    font-size: 38px;
+    font-weight: bolder;
+}
 /* Mensagem Box =========================================== */
 
 .msgbox, .msgbox__morte, .msgbox__none {

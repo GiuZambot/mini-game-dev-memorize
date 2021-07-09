@@ -10,7 +10,7 @@
 //     port: 5432,
 // })
 
-//heroku
+heroku
 const { Pool } = require('pg');
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -51,12 +51,13 @@ const getRanking = (request, response) => {
 
 const setRanking = (request, response) => {
     const { nome, pontos } = request.body;
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    pool.query('INSERT INTO ranking (nome, pontos) VALUES ($1, $2)', [nome, pontos], (error, results) => {
+    // const nome = "giu";
+    // const pontos = "100";
+    pool.query('INSERT INTO ranking (nome, pontos) VALUES ($1, $2) returning id', [nome, pontos], (error, results) => {
         if (error) {
             throw error;
         }
-        response.status(201).send(`Jogada salva! Verifique abaixo se está entre os TOP 50 :) `);
+        response.status(201).send(`Jogada salva! Verifique abaixo se está entre os TOP 50 :) <button class="msgbox__btn" onclick="game.ini(true)">Começar de novo!</button>.`);
     })
 };
 //INSERT INTO public.ranking (nome, pontos) VALUES ('Picles'::character varying, '5'::integer) returning id;

@@ -5,8 +5,9 @@ const game = {
     pontos: 0,
     timer: null,
     host: "https://gamedevlearn.herokuapp.com", // origem do json desafio, uso local "http://localhost:5500"
+    host: "http://localhost:5500",
     certoMsg: `<h1>Você Acertou!</h1><button class="msgbox__btn" onclick="game.ini(false)">Nova Pergunta</button><p>Quantos pontos você consegue fazer antes de morrer?</p>`,
-    morteMsg: `<h1>Você Morreu!</h1><button class="msgbox__btn" onclick="game.ini(true)">Começar de novo!</button><p>Não desanime, tente de novo!</p><div class="putrank"><input type="text" value="" placeholder="Seu nick aqui"><button onclick="game.rankPut()" ></div>`,
+    morteMsg: `<h1>Você Morreu!</h1><button class="msgbox__btn" onclick="game.ini(true)">Começar de novo!</button><p>Não desanime, tente de novo! Mas salve seus pontos!</p><div class="putrank"><input type="text" id="nickRank" placeholder="Seu nick aqui"><button onclick="game.rankPut()">Salvar</button></div>`,
     // Elementos manipulados durante o game
     SOM: document.getElementById("audio"),
     VID: document.getElementById("video"),
@@ -33,7 +34,7 @@ const game = {
             });
         this.rankGet();
     },
-    rankGet: function name(params) {
+    rankGet: function name(nome) {
         // Puxa ranking
         this.RANK.innerHTML = `<img src="load.gif" alt="Gif Carregando">`;
         fetch(this.host + "/ranking")
@@ -41,7 +42,11 @@ const game = {
             .then(function (data) {
                 game.RANK.innerHTML = "";
                 return data.map(function (jogador) {
-                    game.RANK.innerHTML += `<div>${jogador.nome}</div><div>${jogador.pontos}</div>`;
+                    jogador.nome == nome ? (
+                        game.RANK.innerHTML += `<div class="pAtivo">${jogador.nome}</div><div class="pAtivo">${jogador.pontos}</div>`
+                    ) : (
+                        game.RANK.innerHTML += `<div>${jogador.nome}</div><div>${jogador.pontos}</div>`
+                    );
                 });
             })
             .catch(function (error) {
@@ -51,13 +56,18 @@ const game = {
     },
     rankPut: function () {
         // Envia
-        this.RANK.innerHTML = `<img src="load.gif" alt="Gif Carregando">`;
-        let formData = new FormData();
-        formData.append('nome', document.getElementById("nickrank"));
-        formData.append('pontos', this.pontos);
-        fetch(this.host + "/ranking", { method: 'POST', body: formData })
+        const nome = document.getElementById("nickRank").value;
+        if (!nome) {
+            return alert("Faltou escrever seu apelido!");
+        }
+        const data = new URLSearchParams();
+        data.append("nome", nome);
+        data.append("pontos", this.pontos + 1);
+        fetch(this.host + "/rankingPost", { method: 'POST', body: data })
+            .then(response => response.text())
             .then((resp) => {
-                game.RANK.innerHMTL = `<h1>${resp}</h1>`;
+                document.getElementById("msgbox").innerHTML = resp;
+                game.rankGet(nome);
             })
             .catch(function (error) {
                 console.log(error);
