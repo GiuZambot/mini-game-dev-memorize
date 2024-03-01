@@ -4,10 +4,8 @@ const game = {
     relogio: 20,
     pontos: 0,
     timer: null,
-    host: "https://gamedevlearn.herokuapp.com", // origem do json desafio, uso local "http://localhost:5500"
-    // host: "http://localhost:5500",
     certoMsg: `<h1>Você Acertou!</h1><button class="msgbox__btn" onclick="game.ini(false)">Nova Pergunta</button><p>Quantos pontos você consegue fazer antes de morrer?</p>`,
-    morteMsg: `<h1>Você Morreu!</h1><button class="msgbox__btn" onclick="game.ini(true)">Começar de novo!</button><p>Não desanime, tente de novo! Mas salve seus pontos!</p><div class="putrank"><input type="text" id="nickRank" placeholder="Seu nick aqui"><button onclick="game.rankPut()">Salvar</button></div>`,
+    morteMsg: `<h1>Você Morreu!</h1><button class="msgbox__btn" onclick="game.ini(true)">Começar de novo!</button><p>Não desanime, tente de novo!</p>`,
     // Elementos manipulados durante o game
     SOM: document.getElementById("audio"),
     VID: document.getElementById("video"),
@@ -18,7 +16,6 @@ const game = {
     CORE: document.getElementsByClassName("status__coracao")[0],
     PERGUNTA: document.getElementsByClassName("pergunta")[0],
     RESPOSTA: document.getElementsByClassName("resposta")[0],
-    RANK: document.getElementsByClassName("ranking")[0],
     nd: function (element) { return document.createElement(element); },
     ap: function (parent, el) { return parent.appendChild(el); },
     ini: function (prop) {
@@ -26,49 +23,9 @@ const game = {
         this.pong.plin();
         this.MSGBOX.innerHTML = `<img src="load.gif" alt="Gif Carregando">`;
         prop ? (this.cores = 5, this.CORE.innerHTML = 5, this.pontos = 0, this.PONTO.innerHTML = 0) : 0;
-        fetch(this.host + "/desafios/aleatorio")
+        fetch("./desafios.json")
             .then((resp) => resp.json())
             .then(x => this.geraDesfio(x))
-            .catch(function (error) {
-                console.log(error);
-            });
-        this.rankGet();
-    },
-    rankGet: function name(nome) {
-        // Puxa ranking
-        this.RANK.innerHTML = `<img src="load.gif" alt="Gif Carregando">`;
-        fetch(this.host + "/ranking")
-            .then((resp) => resp.json())
-            .then(function (data) {
-                game.RANK.innerHTML = "";
-                return data.map(function (jogador) {
-                    jogador.nome == nome ? (
-                        game.RANK.innerHTML += `<div class="pAtivo">${jogador.nome}</div><div class="pAtivo">${jogador.pontos}</div>`
-                    ) : (
-                        game.RANK.innerHTML += `<div>${jogador.nome}</div><div>${jogador.pontos}</div>`
-                    );
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        this.RANK.style.display = "flex";
-    },
-    rankPut: function () {
-        // Envia
-        const nome = document.getElementById("nickRank").value;
-        if (!nome) {
-            return alert("Faltou escrever seu apelido!");
-        }
-        const data = new URLSearchParams();
-        data.append("nome", nome);
-        data.append("pontos", this.pontos + 1);
-        fetch(this.host + "/rankingPost", { method: 'POST', body: data })
-            .then(response => response.text())
-            .then((resp) => {
-                document.getElementById("msgbox").innerHTML = resp;
-                game.rankGet(nome);
-            })
             .catch(function (error) {
                 console.log(error);
             });
@@ -78,8 +35,9 @@ const game = {
         this.MSGBOX.className = "msgbox__none";
         this.PERGUNTA.innerHTML = "";
         this.RESPOSTA.innerHTML = "";
+        const desafioAleatorio = desafios[Math.floor(Math.random() * desafios.length)];
         // Insere pergunta
-        this.PERGUNTA.innerHTML = `${desafios[0].pergunta}`;
+        this.PERGUNTA.innerHTML = `${desafioAleatorio.pergunta}`;
         // Insere respostas em ordem randomica.
         const resps = [0, 1, 2, 3]; // array para randomizar
         for (let i = 0; i < 4; i++) {
@@ -91,14 +49,13 @@ const game = {
             const btn = this.nd('button');
             btn.className = `btn`;
             btn.id = "btn" + el;
-            btn.innerHTML = `${desafios[0]["resp_" + el]}`;
+            btn.innerHTML = `${desafioAleatorio["resp_" + el]}`;
             btn.addEventListener("mouseout", () => this.pong.ping());
             btn.addEventListener("mousedown", () => game.corrigir(el), { once: true });
             this.ap(this.RESPOSTA, btn);
         }
         // Mostra o jogo, inicia vídeo, animação do background e contagem de tempo.
         this.BOX.style.display = "block";
-        this.RANK.style.display = "flex";
         this.trocarVideo();
         document.body.style.animation = "";
         setTimeout(() => document.body.style.animation = "back_tempo 20s ease", 25);
@@ -138,7 +95,6 @@ const game = {
             this.PONTO.innerHTML = this.pontos,
             this.MSGBOX.innerHTML = this.certoMsg,
             this.BOX.style.display = "none",
-            this.RANK.style.display = "none",
             this.MSGBOX.className = "msgbox"
         ) : (
             // Resposta errada: tira uma vida
@@ -208,5 +164,3 @@ const game = {
         }
     }
 }
-
-window.onload = () => game.rankGet();

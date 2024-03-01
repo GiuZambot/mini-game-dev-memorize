@@ -1,0 +1,58 @@
+[
+    {
+        "pergunta": "Qual método remove o último elemento de um array em JavaScript?",
+        "resp_0": "pop()",
+        "resp_1": "push()",
+        "resp_2": "shift()",
+        "resp_3": "unshift()"
+    },
+    {
+        "pergunta": "Como você declara uma variável em JavaScript?",
+        "resp_0": "var nomeVariavel;",
+        "resp_1": "variable nomeVariavel;",
+        "resp_2": "v nomeVariavel;",
+        "resp_3": "let nomeVariavel;"
+    },
+    {
+        "pergunta": "Qual objeto em JavaScript pode armazenar múltiplos valores em uma única variável?",
+        "resp_0": "Array",
+        "resp_1": "String",
+        "resp_2": "Boolean",
+        "resp_3": "Function"
+    },
+    {
+        "pergunta": "Como você cria uma função em JavaScript?",
+        "resp_0": "function minhaFuncao()",
+        "resp_1": "create function minhaFuncao()",
+        "resp_2": "function: minhaFuncao()",
+        "resp_3": "function = minhaFuncao()"
+    },
+    {
+        "pergunta": "Como você chama uma função chamada 'minhaFuncao'?",
+        "resp_0": "minhaFuncao()",
+        "resp_1": "call minhaFuncao()",
+        "resp_2": "call function minhaFuncao()",
+        "resp_3": "execute minhaFuncao()"
+    },
+    {
+        "pergunta": "Como escrever uma condição IF em JavaScript?",
+        "resp_0": "if (i == 5)",
+        "resp_1": "if i = 5 then",
+        "resp_2": "if i = 5",
+        "resp_3": "if i == 5 then"
+    },
+    {
+        "pergunta": "Como você pode adicionar um comentário em JavaScript?",
+        "resp_0": "//Este é um comentário",
+        "resp_1": "'Este é um comentário",
+        "resp_2": "<--Este é um comentário-->",
+        "resp_3": "/*Este é um comentário*/"
+    },
+    {
+        "pergunta": "Qual é a maneira correta de escrever um array em JavaScript?",
+        "resp_0": "var cores = [\"vermelho\", \"verde\", \"azul\"]",
+        "resp_1": "var cores = (1:\"vermelho\", 2:\"verde\", 3:\"azul\")",
+        "resp_2": "var cores = \"vermelho\", \"verde\", \"azul\"",
+        "resp_3": "var cores = 1 = (\"vermelho\"), 2 = (\"verde\"), 3 = (\"azul\")"
+    }
+]
