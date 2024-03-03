@@ -20,7 +20,7 @@
   "homepage": "https://github.com/GiuZambot/mini-game-dev-memorize#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "nodemon": "^2.0.10",
     "pg": "^8.6.0"
   }
